@@ -29,12 +29,22 @@ export function createApp(config: RigConfig = loadConfig()) {
     } catch {
       return c.notFound();
     }
-    data.rows.sort((a, b) => a.job.localeCompare(b.job));
     return c.html(
       <Layout title={`digest ${night}`} lane={lane()}>
         <DigestPage night={night} data={data} />
       </Layout>,
     );
+  });
+
+  app.get('/api/digest/:night', async (c) => {
+    const night = c.req.param('night');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(night)) return c.json({ error: 'not found' }, 404);
+    try {
+      const { rows, badLines } = await readNight(config.runsDir, night);
+      return c.json({ night, badLines, rows });
+    } catch {
+      return c.json({ error: 'not found' }, 404);
+    }
   });
 
   return app;
