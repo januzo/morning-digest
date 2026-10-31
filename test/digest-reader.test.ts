@@ -13,7 +13,7 @@ function nightWith(lines: string[]): string {
 describe('readNight', () => {
   it('reads the 2026-10-28 fixture: 5 jobs, 1 bad line', async () => {
     const { rows, badLines } = await readNight('runs', '2026-10-28');
-    expect(rows.map((r) => r.job).sort()).toEqual([
+    expect(rows.map((r) => r.job)).toEqual([
       'digest/render',
       'fixtures/refresh',
       'lane/sync',

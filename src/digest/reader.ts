@@ -52,5 +52,7 @@ export const readNight: ReadNight = async (runsDir, night) => {
     }
   }
 
-  return { rows: [...byJob.values()], badLines };
+  // One order for every reader of the night: page and JSON must never disagree (ADR 0001).
+  const rows = [...byJob.values()].sort((a, b) => a.job.localeCompare(b.job));
+  return { rows, badLines };
 };
